@@ -1,0 +1,16 @@
+{
+  "name": "chai_or_backend",
+  "version": "1.0.0",
+  "description": "a backend at chai our code chanel",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "java",
+    "script\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[\u001b[\u001b[\u001b[B\u001b[B\u001b[B\u001b[B\u001b[B\u001b[B\u001b[B\u001b[B\u001b[B\u001b[B\u001b[D\u001b[C"
+  ],
+  "author": "kushal",
+  "license": "ISC"
+}
