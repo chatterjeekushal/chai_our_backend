@@ -1,9 +1,9 @@
 
 import mongoose from "mongoose";
 
-import jwt from "jsonwebtoken";
+import jwt from "jsonwebtoken"; // jwt use for web tokens
 
-import bcrypt from "bcrypt"
+import bcrypt from "bcrypt" // bcrypt use for convart non read human password 
 
 const userschema = new mongoose.Schema({
 
@@ -71,7 +71,7 @@ const userschema = new mongoose.Schema({
 }, { timestamps: true })
 
 
-
+// convart normal password to hash password 
 
 userschema.pre("save", async function (next) {
 
@@ -84,6 +84,8 @@ userschema.pre("save", async function (next) {
 
 
 })
+
+// compare normal password to hash password
 
 userschema.methods.isPasswordCorrect = async function (password) {
 
