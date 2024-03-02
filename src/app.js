@@ -24,4 +24,23 @@ app.use(cookieParser())
 
 
 
+
+
+//routes import
+
+
+import userRouter from './routers/user.routs.js'
+
+
+
+// routs deklarasan
+
+app.use("/api/v1/users",userRouter) //syntax app.use("routename","route file name")
+
+//url https://localhost:3000/api/v1/users/register
+
+
+
+
+
 export default app

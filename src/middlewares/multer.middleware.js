@@ -9,6 +9,7 @@ const storage = multer.diskStorage({
 
       cb(null,file.originalname)
 
+      console.log(`multer file original name is ${file.originalname}`);
     }
 
   })
