@@ -1,11 +1,11 @@
 
-import mongoose from "mongoose";
+import mongoose, {Schema} from "mongoose";
 
 import jwt from "jsonwebtoken"; // jwt use for web tokens
 
 import bcrypt from "bcrypt" // bcrypt use for convart non read human password 
 
-const userschema = new mongoose.Schema({
+const userschema = new Schema({
 
     username: {
         type: String,
@@ -125,6 +125,5 @@ process.env.REFRESH_TOKEN_SECRET, { expiresIn: process.env.REFRESH_TOKEN_EXPIRY}
 }
 
 
-export const Userdetails = mongoose.model("User",userschema);
+export const User = mongoose.model("User",userschema);
 
- 

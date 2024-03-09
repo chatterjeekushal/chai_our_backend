@@ -1,74 +1,77 @@
-import asynchandaler from "../utils/acync_handaler.js";
-
-import {Userdetails} from "../models/user.model.js";
-
-import body from "body-parser";
-
-import ApiError from "../utils/api_error.js";
-
-import { upload } from "../middlewares/multer.middleware.js";
-
-import { UplordOnCloudinary } from "../utils/clounary.js";
 
 
+import { asynchandaler } from "../utils/acync_handaler.js"
 
-const ragisterUser = asynchandaler(async (req, res) => {
+import { upload } from "../middlewares/multer.middleware.js"
+
+import { ApiError } from "../utils/api_error.js"
+
+import { User } from "../models/user.model.js"
+
+import { UplordOnCloudinary } from "../utils/clounary.js"
+
+import { ApiResponse } from "../utils/api_responce.js"
+
+import body from "body-parser"
 
 
-    // ragister user
 
-    // get user detiles
-    //validasan - not emty
-    //cheack if user exists username and email
-    // cheack for images cheack for after
-    // uplord them cloudinary,avter
-    //create a user object - create entey in db
-    //remove password and refresh token feild from responce
-    //cheack for user create
-    // return responce
+const registerUser = asynchandaler(async (req, res) => {
 
-const {fullName,username,email,password}=req.body
 
-console.log(email);
+    const { fullName, email, username, password } = req.body
 
-if ([fullName,email,username,password].some((field)=> field?.trim()==="")) {
-    
-    throw new ApiError(400,"All filed are requird")
 
-}
+    if ([fullName, email, username, password].some((field) => field?.trim() === "")) {
 
-const existedUser = User.findOne({
+        throw new ApiError(400, "all filed are requred")
 
-    $or:[{username},{email}]
+    }
+
+
+    const exesituser = await User.findOne({
+
+        $or: [{ username }, { email }]
+    })
+
+    if (exesituser) {
+
+        throw new ApiError(409, "user with email or username alrady exsist")
+    }
+
+    const avtarlocalpath = req.files?.avatar[0]?.path
+
+    const coverimagelocalpath = req.files?.coverImage[0]?.path
+
+
+    if (!avtarlocalpath) {
+
+        throw new ApiError(400, "avtar file is requard")
+    }
+
+
+    const avatar = await UplordOnCloudinary(avtarlocalpath)
+    const coverImage = await UplordOnCloudinary(coverimagelocalpath)
+
+
+    if (!avatar) {
+
+        throw new ApiError(400, "avtar is requred")
+    }
+
+    const User = await User.create({ fullName, avtar: avatar.url, coverimage: coverImage || "", email, password, username: username.toLowerCase() })
+
+    const createdUser = await User.findById(User._id).select("-password -refreshToken")
+
+    if (!createdUser) {
+
+        throw new ApiError(500, "someting went wrong")
+    }
+
+
+    return res.status(201).json(new ApiResponse(200, createdUser, "user ragister sussufully"))
+
+
 })
 
-if (existedUser) {
-    throw new ApiError(409,"User with email or username already exists")
-}
-
-const avatarLocalPath=req.files?.avatar[0]?.path;
-
-const coverImageLocalPath = req.files?.coverImage[0]?.path;
-
-if (!avatarLocalPath) {
-    
-    throw new ApiError(400,"avatar file is reqired")
-}
-
-const avatar = await UplordOnCloudinary(avatarLocalPath)
-
-const coverimage = await UplordOnCloudinary(coverImageLocalPath)
-
-
-if (!avatar) {
-    throw new ApiError(400,"avatar file is reqired")
-}
-
-Userdetails.create({fullName,avatar:avatar.url,coverimage:coverimage?.url||"",email,username:username.toLowerCase()})
-
-
-
-})
-
-
-export { ragisterUser }
+export { registerUser }

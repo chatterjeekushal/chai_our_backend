@@ -12,4 +12,4 @@
 
 
 
-export default asynchandaler
+export { asynchandaler }
